@@ -34,6 +34,7 @@ import {
   updateSignatureFailure,
   updateSignatureSuccess,
   resetNextPrevToken,
+  setLoading,
 } from './actions';
 import { Email, EmailDetails } from '../dataModel/email-details.model';
 
@@ -107,7 +108,7 @@ const _emailReducer = createReducer(
         nextPageToken,
         prevPageToken,
       },
-      loading: false,
+      // loading: false,
     })
   ),
   on(updateCurrentPage, (state, { currentPage }) => ({
@@ -296,6 +297,10 @@ const _emailReducer = createReducer(
       nextPageToken: nextPageToken || undefined, // Handle resetting nextPageToken
       prevPageToken: prevPageToken || undefined, // Handle resetting prevPageToken
     },
+  })),
+  on(setLoading, (state, { loading }) => ({
+    ...state,
+    loading: loading,
   }))
 );
 

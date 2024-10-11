@@ -30,6 +30,7 @@ import {
   selectHasPrevPage,
   selectTotalPages,
   selectEmailsByLabel,
+  dataLoading,
 } from '../dataStore/selector';
 
 @Component({
@@ -85,46 +86,9 @@ export class MailboxComponent {
         }
       });
 
-    // this.store
-    //   .pipe(
-    //     select(
-    //       selectEmailsByLabel(this.getValidLabel(this.router.url.slice(1)))
-    //     ), // Select emails by the folder label
-    //     withLatestFrom(this.store.select(selectCurrentPage)),
-    //     take(1) // Only take the first emission and complete
-    //   )
-    //   .subscribe(([emails, currentPage]) => {
-    //     if (!emails || emails.length === 0) {
-    //       // No emails loaded for this label (folder), dispatch action
-    //       this.store.dispatch(
-    //         loadEmails({
-    //           currentPage: currentPage,
-    //           label: this.getValidLabel(this.router.url.slice(1)), // Pass the correct label
-    //         })
-    //       );
-    //       console.log(
-    //         this.emails$,
-    //         this.getValidLabel(this.router.url.slice(1)).toUpperCase()
-    //       );
-    //     } else {
-    //       console.log(
-    //         this.emails$,
-    //         this.getValidLabel(this.router.url.slice(1)).toUpperCase()
-    //       );
-    //       // Emails already loaded for this label, use stored values
-    //       this.emails$ = this.store.pipe(
-    //         select(
-    //           selectEmailsByLabel(this.getValidLabel(this.router.url.slice(1)))
-    //         )
-    //       );
-    //       this.currentPage$ = this.store.pipe(select(selectCurrentPage));
-    //       this.totalPages$ = this.store.pipe(select(selectTotalPages));
-    //       this.hasNextPage$ = this.store.pipe(select(selectHasNextPage));
-    //       this.hasPrevPage$ = this.store.pipe(select(selectHasPrevPage));
-    //       this.loading = false;
-    //     }
-
-    //   });
+    this.store
+      .select(dataLoading)
+      .subscribe((v) => setTimeout(() => (this.loading = v) , 500));
 
   }
 

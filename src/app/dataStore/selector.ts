@@ -119,3 +119,8 @@ export const selectEmailsByLabel = (label: 'inbox' | 'sent' | 'trash' | 'draft')
       )
     )
   );
+
+  export const dataLoading = createSelector(
+    selectEmailState,
+    (state: State) => state.loading
+  );

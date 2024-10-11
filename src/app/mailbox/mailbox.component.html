@@ -99,16 +99,16 @@
           <div class="p-4 border-b">
             <h2 class="text-lg font-semibold text-gray-800">Emails</h2>
           </div>
-          <div class="flex items-center justify-between mb-4">
+          <!-- <div class="flex items-center justify-between mb-4">
             <div class="flex items-center space-x-4 px-2">
-              <!-- Select All Checkbox -->
+           
               <input
                 type="checkbox"
                 class="form-checkbox text-blue-600 h-4 w-4"
                 (change)="selectAllEmails($event)"
               />
 
-              <!-- Bulk Actions Dropdown -->
+             
               <div class="relative">
                 <button
                   class="text-blue-500 hover:underline"
@@ -176,12 +176,13 @@
                 </div>
               </div>
 
-              <!-- <button class="text-blue-500 hover:underline">Label</button> -->
+            
             </div>
-          </div>
+          </div> -->
 
           <!-- Email List -->
-          <div
+           <div *ngIf="(emails$ | async) as emails; else noEmails" >
+          <div 
             *ngFor="let email of emails$ | async"
             class="flex justify-between items-start border-b py-3 px-2"
           >
@@ -225,6 +226,12 @@
               {{ email.date | date : "short" }}
             </div>
           </div>
+          </div>
+          <ng-template #noEmails>
+            <div class="p-5 border-spacing-80 border-black  ">
+              No emails available.
+            </div>
+          </ng-template>
           <!-- Pagination -->
           <div class="p-4 flex justify-between items-center border-t">
             <button

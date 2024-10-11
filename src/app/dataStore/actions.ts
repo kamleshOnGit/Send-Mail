@@ -193,3 +193,8 @@ export const resetNextPrevToken = createAction(
     prevPageToken?: string;
   }>()
 );
+
+export const setLoading = createAction(
+  '[Email] Set Loading',
+  props<{ loading: boolean }>()
+);

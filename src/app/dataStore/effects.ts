@@ -1,7 +1,7 @@
 // email.effects.ts
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { from, of } from 'rxjs';
+import { forkJoin, from, of } from 'rxjs';
 import {
   catchError,
   finalize,
@@ -40,6 +40,7 @@ import {
   updateSignature,
   updateSignatureFailure,
   updateSignatureSuccess,
+  setLoading,
 } from './actions';
 
 import { GmailService } from '../services/gmail.service';
@@ -108,7 +109,7 @@ export class EmailEffects {
         const pageToken =
           action.direction === 'next' ? nextPageToken : prevPageToken;
 
-        return of(loadEmails({ currentPage, pageToken  , label:action.label}));
+        return of(loadEmails({ currentPage, pageToken, label: action.label }));
       })
     )
   );
@@ -130,8 +131,9 @@ export class EmailEffects {
       ofType(loadEmailsSuccess),
       mergeMap(({ emails }) => {
         const emailIds = emails.map((email) => email.id);
-        return from(emailIds).pipe(
-          mergeMap((id) =>
+        // Use forkJoin to wait for all email fetching to complete
+        return forkJoin(
+          emailIds.map((id) =>
             this.gmailService.getEmailById(id).pipe(
               map((email) =>
                 saveEmailDetails({
@@ -153,14 +155,21 @@ export class EmailEffects {
               ),
               catchError((error) => {
                 console.error('Error fetching email details:', error);
-                return of(); // Handle errors appropriately
+                return of(); // Return an empty observable in case of error
               })
             )
           )
+        ).pipe(
+          // Once all emails are fetched, dispatch an action to set loading to false
+          mergeMap((emailDetailsActions) => [
+            ...emailDetailsActions,
+            setLoading({ loading: false }), // Dispatch action to set loading to false
+          ])
         );
       })
     )
   );
+
   // Effect to load sheet data
   loadSheetData$ = createEffect(() =>
     this.actions$.pipe(
@@ -183,7 +192,7 @@ export class EmailEffects {
       tap(() => this.store.dispatch(startSendingEmail())), // Start loader
       withLatestFrom(this.store.select(selectSheetData)),
       mergeMap(([action, sheetData]) => {
-        const { sender, recipient, subject, body , signature} = action;
+        const { sender, recipient, subject, body, signature } = action;
 
         return this.gmailService
           .sendEmail(sender, recipient, subject, body, signature)
