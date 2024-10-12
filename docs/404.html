@@ -7,11 +7,11 @@
   <body>
     <script type="text/javascript">
       var path = window.location.pathname;
-      var newPath = path.replace("/<repository-name>", "");
+      var newPath = path.replace("/send-mail", "");
       if (newPath.startsWith("/")) {
         newPath = newPath.substring(1);
       }
-      window.location.href = "/<repository-name>?" + newPath;
+      window.location.href = "/send-mail?" + newPath;
     </script>
   </body>
 </html>
