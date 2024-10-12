@@ -4,5 +4,14 @@
     <meta http-equiv="refresh" content="0; url=./index.html" />
     <title>SendMail</title>
   </head>
-  <body></body>
+  <body>
+    <script type="text/javascript">
+      var path = window.location.pathname;
+      var newPath = path.replace("/<repository-name>", "");
+      if (newPath.startsWith("/")) {
+        newPath = newPath.substring(1);
+      }
+      window.location.href = "/<repository-name>?" + newPath;
+    </script>
+  </body>
 </html>
