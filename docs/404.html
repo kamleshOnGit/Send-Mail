@@ -1,17 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta http-equiv="refresh" content="0; url=./index.html" />
-    <title>SendMail</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+      // Adjust the path as necessary
+      var repoName = "send-mail"; // Replace with your repository name
+      var path = window.location.pathname;
+
+      // Remove the repository name from the path
+      var newPath = path.replace(`/${repoName}`, "");
+
+      // Redirect to the Angular app, ensuring to preserve query parameters
+      if (window.location.search) {
+        window.location.href = `/${repoName}${newPath}${window.location.search}`;
+      } else {
+        window.location.href = `/${repoName}${newPath}`;
+      }
+    </script>
   </head>
   <body>
-    <script type="text/javascript">
-      var path = window.location.pathname;
-      var newPath = path.replace("/send-mail", "");
-      if (newPath.startsWith("/")) {
-        newPath = newPath.substring(1);
-      }
-      window.location.href = "/send-mail?" + newPath;
-    </script>
+    <p>Redirecting...</p>
   </body>
 </html>
