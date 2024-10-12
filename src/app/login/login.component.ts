@@ -5,6 +5,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FooterComponent } from '../shared/footer/footer.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ import { HeaderComponent } from '../shared/header/header.component';
 })
 export class LoginComponent {
   params: any;
+  redirectUri = environment.googleAuthRedirectUri;
   constructor(
     private authServiceCustom: AuthService, // Renamed for clarity
     private router: Router
@@ -38,9 +40,8 @@ export class LoginComponent {
 
     // Parameters to pass to OAuth 2.0 endpoint.
     this.params = {
-      client_id:
-        'Put your client secret here !',
-      redirect_uri: 'https://kamleshongit.github.io/send-mail/auth-callback', // Make sure this matches your Google Cloud Console settings
+      client_id: 'Put your client secret here !',
+      redirect_uri: this.redirectUri, // Make sure this matches your Google Cloud Console settings
       response_type: 'token',
       discoveryDocs: [
         'https://sheets.googleapis.com/$discovery/rest?version=v4',
